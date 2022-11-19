@@ -77,7 +77,7 @@ async def get_poster(query, bulk=False, id=False, file=None):
                 filtered = movieid
         else:
             filtered = movieid
-        movieid=list(filter(lambda k: k.get('kind') in ['movie', 'tv series'], filtered))
+        movieid=list(filter(lambda k: k.get('kind') in ['Movie', 'Series'], filtered))
         if not movieid:
             movieid = filtered
         if bulk:
@@ -101,6 +101,13 @@ async def get_poster(query, bulk=False, id=False, file=None):
         plot = movie.get('plot outline')
     if plot and len(plot) > 800:
         plot = plot[0:800] + "..."
+    
+    if movie.get("kind") == 'movie':
+        mov_ser='Movie'
+    elif movie.get("kind") == 'tv series':
+        mov_ser='Series'
+    else:
+        mov_ser=movie.get("kind")
 
     return {
         'title': movie.get('title'),
@@ -109,7 +116,7 @@ async def get_poster(query, bulk=False, id=False, file=None):
         "seasons": movie.get("number of seasons"),
         "box_office": movie.get('box office'),
         'localized_title': movie.get('localized title'),
-        'kind': movie.get("kind"),
+        'kind': movie_ser,
         "imdb_id": f"tt{movie.get('imdbID')}",
         "cast": list_to_str(movie.get("cast")),
         "runtime": list_to_str(movie.get("runtimes")),
