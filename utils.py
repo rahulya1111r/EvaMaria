@@ -116,7 +116,7 @@ async def get_poster(query, bulk=False, id=False, file=None):
         "seasons": movie.get("number of seasons"),
         "box_office": movie.get('box office'),
         'localized_title': movie.get('localized title'),
-        'kind': movie_ser,
+        'kind': mov_ser,
         "imdb_id": f"tt{movie.get('imdbID')}",
         "cast": list_to_str(movie.get("cast")),
         "runtime": list_to_str(movie.get("runtimes")),
