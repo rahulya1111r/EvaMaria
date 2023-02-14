@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from info import CHANNELS
+from info import CHANNELS , ADMINS
 from database.ia_filterdb import save_file
 
 media_filter = filters.document | filters.video | filters.audio
@@ -23,7 +23,7 @@ async def media(bot, message):
 async def start(client, message):
     try:
         for file_type in ("document", "video", "audio"):
-        media = getattr(message.reply_to_message , file_type, None)
+            media = getattr(message.reply_to_message , file_type, None)
         if media is not None:
             break
         else:
