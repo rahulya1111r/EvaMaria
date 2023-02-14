@@ -24,8 +24,8 @@ async def start(client, message):
     try:
         for file_type in ("document", "video", "audio"):
             media = getattr(message.reply_to_message , file_type, None)
-        if media is not None:
-            break
+            if media is not None:
+                break
         else:
             return
 
