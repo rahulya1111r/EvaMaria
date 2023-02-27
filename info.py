@@ -46,7 +46,7 @@ SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'TeamEvamaria')
 P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "False")), False)
 IMDB = is_enabled((environ.get('IMDB', "True")), True)
 SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "False")), False)
-CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", '''<b><a href=https://t.me/Latest_Movies_And_Series>{file_name}</a> 
+CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", '''<b><a href=https://t.me/Latest_Movies_And_Series>{file_caption}</a> 
 ━━━━━━━━━━━━━━━━━━━ 
 💥Jᴏɪɴ Aɴᴅ Sᴜᴘᴘᴏʀᴛ💥
 @Latest_Movies_And_Series</b>''')
