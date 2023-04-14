@@ -54,18 +54,23 @@ async def x(app , msg):
         return await msg.reply_text("Chat Id must be integer not string")
     jj=await msg.reply_text("Processing")
     documents=col.find({})
-    id_list = [document['_id'] for document in documents]
+    id_list = [{'id': document['_id'], 'file_name': document['file_name'], 'file_caption': document['caption'] , 'file_size':document['file_size']} for document in documents]
     await jj.edit(f"Found {len(id_list)} Files In The DB Starting To Send In Chat {args}")
-    for i in id_list:
+    for j , i in enumerate(id_list):
         try:
             try:
                 await app.send_video(msg.chat.id , i['id'] , caption=CUSTOM_FILE_CAPTION.format(file_name=i['file_name'] , file_caption=i['file_caption'] , file_size=i['file_size']))
+                await jj.edit(f"Found {len(id_list)} Files In The DB Starting To Send In Chat {args}\nProcessed : {j+1}")
                 await asyncio.sleep(random.randint(5, 10))
+                
             except Exception as e:
                 print(e)
         except Exception:
             try:
                 await app.send_document(msg.chat.id , i['id'] , caption=CUSTOM_FILE_CAPTION.format(file_name=i['file_name'] , file_caption=i['file_caption'] , file_size=i['file_size']))
+                await jj.edit(f"Found {len(id_list)} Files In The DB Starting To Send In Chat {args}\nProcessed : {j+1}")
                 await asyncio.sleep(random.randint(5, 10))
             except Exception as e:
                 print(e)
+    await jj.delete()
+    await msg.reply_text("completed")
