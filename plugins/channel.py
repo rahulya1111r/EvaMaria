@@ -59,10 +59,12 @@ async def x(app , msg):
         try:
             try:
                 await app.send_video(msg.chat.id , i)
+                await asyncio.sleep(random.randint(5, 10))
             except Exception as e:
                 print(e)
         except Exception:
             try:
                 await app.send_video(msg.chat.id , i)
+                await asyncio.sleep(random.randint(5, 10))
             except Exception as e:
                 print(e)
