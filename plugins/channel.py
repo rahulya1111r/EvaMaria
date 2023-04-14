@@ -5,6 +5,8 @@ from database.ia_filterdb import save_file
 import asyncio
 import random
 
+media_filter = filters.document | filters.video | filters.audio
+
 myclient = pymongo.MongoClient(DATABASE_URI)
 db=myclient[DATABASE_NAME]
 col=db[COLLECTION_NAME]
