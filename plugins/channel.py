@@ -1,11 +1,10 @@
 import pymongo
 from pyrogram import Client, filters
-from info import DATABASE_URI , DATABASE_NAME , COLLECTION_NAME , ADMINS , CHANNELS
+from info import DATABASE_URI , DATABASE_NAME , COLLECTION_NAME , ADMINS , CHANNELS , CUSTOM_FILE_CAPTION
 from database.ia_filterdb import save_file
 import asyncio
 import random
 
-media_filter = filters.document | filters.video | filters.audio
 myclient = pymongo.MongoClient(DATABASE_URI)
 db=myclient[DATABASE_NAME]
 col=db[COLLECTION_NAME]
@@ -23,7 +22,7 @@ async def media(bot, message):
     media.file_type = file_type
     media.caption = message.caption
     await save_file(media)
-    
+
 @Client.on_message(filters.command("savefile") & filters.user(ADMINS))
 async def start(client, message):
     try:
@@ -40,7 +39,7 @@ async def start(client, message):
         await message.reply_text("**Saved In DB**")
     except Exception as e:
         await message.reply_text(f"**Error :- {str(e)}**")
-        
+
 @Client.on_message(filters.command("sendall") & filters.user(ADMINS))
 async def x(app , msg):
     args=msg.text.split(maxsplit=1)
@@ -58,13 +57,13 @@ async def x(app , msg):
     for i in id_list:
         try:
             try:
-                await app.send_video(msg.chat.id , i)
+                await app.send_video(msg.chat.id , i['id'] , caption=CUSTOM_FILE_CAPTION.format(file_name=i['file_name'] , file_caption=i['file_caption'] , file_size=i['file_size']))
                 await asyncio.sleep(random.randint(5, 10))
             except Exception as e:
                 print(e)
         except Exception:
             try:
-                await app.send_video(msg.chat.id , i)
+                await app.send_document(msg.chat.id , i['id'] , caption=CUSTOM_FILE_CAPTION.format(file_name=i['file_name'] , file_caption=i['file_caption'] , file_size=i['file_size']))
                 await asyncio.sleep(random.randint(5, 10))
             except Exception as e:
                 print(e)
