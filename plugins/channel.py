@@ -1,9 +1,14 @@
+import pymongo
 from pyrogram import Client, filters
-from info import CHANNELS , ADMINS
+from info import DATABASE_URI , DATABASE_NAME , COLLECTION_NAME , ADMINS , CHANNELS
 from database.ia_filterdb import save_file
+import asyncio
+import random
 
 media_filter = filters.document | filters.video | filters.audio
-
+myclient = pymongo.MongoClient(DATABASE_URI)
+db=myclient[DATABASE_NAME]
+col=db[COLLECTION_NAME]
 
 @Client.on_message(filters.chat(CHANNELS) & media_filter)
 async def media(bot, message):
@@ -35,3 +40,29 @@ async def start(client, message):
         await message.reply_text("**Saved In DB**")
     except Exception as e:
         await message.reply_text(f"**Error :- {str(e)}**")
+        
+@Client.on_message(filters.command("sendall") & filters.user(ADMINS))
+async def x(app , msg):
+    args=msg.text.split(maxsplit=1)
+    if len(args) == 1:
+        return await msg.reply_text("Give Chat ID Also Where To Send Files")
+    args=args[1]
+    try:
+        args=int(args)
+    except Exception:
+        return await msg.reply_text("Chat Id must be integer not string")
+    jj=await msg.reply_text("Processing")
+    documents=col.find({})
+    id_list = [document['_id'] for document in documents]
+    await jj.edit(f"Found {len(id_list)} Files In The DB Starting To Send In Chat {args}")
+    for i in id_list:
+        try:
+            try:
+                await app.send_video(msg.chat.id , i)
+            except Exception as e:
+                print(e)
+        except Exception:
+            try:
+                await app.send_video(msg.chat.id , i)
+            except Exception as e:
+                print(e)
